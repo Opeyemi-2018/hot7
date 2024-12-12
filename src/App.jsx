@@ -43,10 +43,7 @@ const App = () => {
           </h1>
           <p className="text-lg text-gray-300">all content available here</p>
           <div className="flex items-center justify-center mt-8">
-            <form
-              onSubmit={handleSearch}
-              className="flex items-center gap-3 w-full"
-            >
+            <form onSubmit={handleSearch} className="flex items-center  w-full">
               <input
                 type="text"
                 placeholder="Search for videos..."
@@ -72,7 +69,7 @@ const App = () => {
 
       {/* Display Search Results */}
       <div className="w-full my-4">
-        {results.length > 0 && (
+        {results.length > 0 ? (
           <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {results.map((result, index) => (
               <div key={index} className="relative flex flex-col items-center">
@@ -93,6 +90,13 @@ const App = () => {
                 </div>
               </div>
             ))}
+          </div>
+        ) : (
+          <div>
+            <h1 className="text-center font-semibold text-gray-600 mt-8 text-2xl">
+              {" "}
+              sorry no content available !!!
+            </h1>
           </div>
         )}
       </div>
