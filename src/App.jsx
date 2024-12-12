@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import axios from "axios";
+import porn from "./public/porn.jpg";
 
 const App = () => {
   const [query, setQuery] = useState("");
@@ -29,42 +30,48 @@ const App = () => {
   };
 
   return (
-    <div className="flex flex-col items-center p-6 bg-gray-900 min-h-screen text-gray-200">
-      <h1 className="text-4xl sm:text-5xl md:text-6xl font-semibold animate-bounce mb-8">
-        Video Search
-      </h1>
-
-      {/* Search Bar */}
-      <div className="w-full max-w-3xl mb-8">
-        <form
-          onSubmit={handleSearch}
-          className="flex items-center border rounded-full bg-white shadow-md"
-        >
-          <input
-            type="text"
-            className="flex-1 px-4 py-2 text-gray-700 outline-none rounded-l-full"
-            placeholder="Search for videos..."
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-          />
-          <button
-            type="submit"
-            className="px-6 py-2 bg-orange-500 text-white font-semibold rounded-r-full hover:bg-blue-600"
-          >
-            Search
-          </button>
-        </form>
+    <div>
+      <div className="relative overflow-hidden bg-gray-900 py-4">
+        <img
+          src={porn} // Replace with your actual image path
+          alt="Background"
+          className="absolute inset-0 object-cover  w-full h-full opacity-50"
+        />
+        <div className="relative container mx-auto px-4 py-16 text-center">
+          <h1 className="text-5xl font-bold text-white mb-4">
+            Hot7 <span className="text-[#FFAAAA]">media</span>
+          </h1>
+          <p className="text-lg text-gray-300">all content available here</p>
+          <div className="flex items-center justify-center mt-8">
+            <form
+              onSubmit={handleSearch}
+              className="flex items-center gap-3 w-full"
+            >
+              <input
+                type="text"
+                placeholder="Search for videos..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="w-full px-4 py-3 rounded-md border border-gray-700 focus:outline-none focus:border-blue-500"
+              />
+              <button
+                type="button"
+                className="ml-4 px-4 py-3 bg-[#FFAAAA] font-semibold text-white rounded-md hover:bg-pink-600"
+              >
+                Search
+              </button>
+            </form>
+          </div>
+        </div>
       </div>
-
-      {/* Loading State */}
       {loading && (
-        <p className="mt-4 text-orange-500 text-3xl font-semibold">
+        <p className="mt-4 text-pink-500 text-center text-3xl font-semibold">
           Loading...
         </p>
       )}
 
       {/* Display Search Results */}
-      <div className="w-full">
+      <div className="w-full my-4">
         {results.length > 0 && (
           <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {results.map((result, index) => (
