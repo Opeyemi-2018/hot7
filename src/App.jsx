@@ -1,18 +1,33 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import porn from "./public/porn.jpg";
+import porn2 from "./public/porn-2.jpg";
+import porn3 from "./public/porn-3.jpg";
+import porn4 from "./public/porn-4.jpg";
 
 const App = () => {
   const [query, setQuery] = useState("");
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [searched, setSearched] = useState(false);
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // Function to handle the search and fetch results from the eporner API
+  const images = [porn, porn2, porn3, porn4];
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImageIndex((prevIndex) => (prevIndex + 1) % images.length);
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
   const handleSearch = async (e) => {
     e.preventDefault();
     if (!query) return;
 
     setLoading(true);
+    setSearched(true); // Mark as searched
 
     try {
       const response = await axios.get(
@@ -21,7 +36,7 @@ const App = () => {
         )}&per_page=10&page=1&thumbsize=big&order=top-weekly&gay=1&lq=1&format=json`
       );
 
-      setResults(response.data.videos); // Assuming 'videos' is the field in the API response that contains the video details
+      setResults(response.data.videos || []); // Default to an empty array if no videos field exists
     } catch (error) {
       console.error("Error fetching data:", error);
     } finally {
@@ -31,11 +46,11 @@ const App = () => {
 
   return (
     <div>
-      <div className="relative overflow-hidden bg-gray-900 py-4">
+      <div className="relative overflow-hidden bg-gray-950 py-4">
         <img
-          src={porn} // Replace with your actual image path
+          src={images[currentImageIndex]}
           alt="Background"
-          className="absolute inset-0 object-cover  w-full h-full opacity-50"
+          className="absolute inset-0 object-cover w-full h-full opacity-50"
         />
         <div className="relative container mx-auto px-4 py-16 text-center">
           <h1 className="text-5xl font-bold text-white mb-4">
@@ -43,16 +58,16 @@ const App = () => {
           </h1>
           <p className="text-lg text-gray-300">all content available here</p>
           <div className="flex items-center justify-center mt-8">
-            <form onSubmit={handleSearch} className="flex items-center  w-full">
+            <form onSubmit={handleSearch} className="flex items-center w-full">
               <input
                 type="text"
                 placeholder="Search for videos..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                className="w-full px-4 py-3 rounded-md border border-gray-700 focus:outline-none focus:border-blue-500"
+                className="w-full px-4 py-3 rounded-md   focus:outline-none"
               />
               <button
-                type="button"
+                type="submit"
                 className="ml-4 px-4 py-3 bg-[#FFAAAA] font-semibold text-white rounded-md hover:bg-pink-600"
               >
                 Search
@@ -62,14 +77,22 @@ const App = () => {
         </div>
       </div>
       {loading && (
-        <p className="mt-4 text-pink-500 text-center text-3xl font-semibold">
-          Loading...
-        </p>
+        <div className="flex flex-col items-center justify-center flex-grow mt-28">
+          <div className="h-20 w-20 rounded-full animate-ping bg-[#FFAAAA]"></div>
+        </div>
       )}
 
-      {/* Display Search Results */}
+      {/* Display Results or Messages */}
       <div className="w-full my-4">
-        {results.length > 0 ? (
+        {!query && !searched ? ( // No input and no search yet
+          <h2 className="text-center text-gray-500 mt-8 text-2xl">
+            All content available.
+          </h2>
+        ) : results.length === 0 && searched && !loading ? ( // No matches found
+          <h2 className="text-center text-gray-500 mt-8 text-2xl">
+            No content available.
+          </h2>
+        ) : (
           <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
             {results.map((result, index) => (
               <div key={index} className="relative flex flex-col items-center">
@@ -90,13 +113,6 @@ const App = () => {
                 </div>
               </div>
             ))}
-          </div>
-        ) : (
-          <div>
-            <h1 className="text-center font-semibold text-gray-600 mt-8 text-2xl">
-              {" "}
-              sorry no content available !!!
-            </h1>
           </div>
         )}
       </div>
