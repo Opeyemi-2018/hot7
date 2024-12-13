@@ -93,7 +93,7 @@ const App = () => {
             No content available.
           </h2>
         ) : (
-          <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+          <div className="md:px-3 px-1 grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 md:gap-6 gap-2">
             {results.map((result, index) => (
               <div key={index} className="relative flex flex-col items-center">
                 <div className="relative w-full">
