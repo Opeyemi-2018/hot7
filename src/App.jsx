@@ -12,6 +12,7 @@ const App = () => {
   const [searched, setSearched] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedVideo, setSelectedVideo] = useState(null);
+  const [page, setPage] = useState(1); // New state for pagination
 
   const images = [porn, porn2, porn3, porn4];
 
@@ -28,6 +29,7 @@ const App = () => {
 
     setLoading(true);
     setSearched(true);
+    setPage(1); // Reset page on new search
 
     try {
       const response = await axios.get(
@@ -39,6 +41,25 @@ const App = () => {
       setQuery("");
     } catch (error) {
       console.error("Error fetching data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleShowMore = async () => {
+    const nextPage = page + 1;
+    setLoading(true);
+
+    try {
+      const response = await axios.get(
+        `https://www.eporner.com/api/v2/video/search/?query=${encodeURIComponent(
+          query
+        )}&per_page=10&page=${nextPage}&thumbsize=big&order=top-weekly&gay=1&lq=1&format=json`
+      );
+      setResults((prevResults) => [...prevResults, ...response.data.videos]);
+      setPage(nextPage);
+    } catch (error) {
+      console.error("Error fetching more videos:", error);
     } finally {
       setLoading(false);
     }
@@ -103,7 +124,7 @@ const App = () => {
             {selectedVideo.embed ? (
               <iframe
                 src={`${selectedVideo.embed}?controls=0&showinfo=0&modestbranding=1`}
-                className=" md:w-[700px] w-full aspect-video rounded-md shadow-md"
+                className=" md:w-[700px] w-full md:h-[500px] h-[500px] aspect-video rounded-md shadow-md"
                 frameBorder="0"
                 allowFullScreen
                 allow="autoplay; encrypted-media"
@@ -159,6 +180,18 @@ const App = () => {
           </div>
         )}
       </div>
+
+      {/* Show More Button */}
+      {results.length > 0 && !loading && (
+        <div className="flex justify-center my-6">
+          <button
+            onClick={handleShowMore}
+            className="px-6 py-3 bg-[#FFAAAA] text-white rounded-md hover:bg-pink-600 font-semibold"
+          >
+            Show More
+          </button>
+        </div>
+      )}
 
       {/* Loading Indicator */}
       {loading && (
