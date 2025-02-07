@@ -103,7 +103,7 @@ const App = () => {
             {selectedVideo.embed ? (
               <iframe
                 src={`${selectedVideo.embed}?controls=0&showinfo=0&modestbranding=1`}
-                className=" w-[700px] aspect-video rounded-md shadow-md"
+                className=" md:w-[700px] w-full aspect-video rounded-md shadow-md"
                 frameBorder="0"
                 allowFullScreen
                 allow="autoplay; encrypted-media"
