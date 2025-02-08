@@ -88,72 +88,115 @@ const App = () => {
 
   return (
     <div>
-      {/* Hero Section */}
-      <div
-        className={`relative overflow-hidden ${
-          heights ? "min-h-0" : "min-h-screen"
-        } bg-gray-950 py-4`}
-      >
-        <img
-          src={images[currentImageIndex]}
-          alt="Background"
-          className="absolute inset-0 object-cover w-full h-full opacity-50"
-        />
-        <div className="relative flex items-center flex-col gap-8 container mx-auto px-4 py-16 text-center">
-          <h1 className="text-5xl font-bold text-white mb-4">
-            Hot7 <span className="text-[#FFAAAA]">media</span>
-          </h1>
-          <p className="text-lg text-gray-300">
-            - the most comprehensive source of HD porn videos that you can
-            currently find on the internet.
-          </p>
-          <form onSubmit={handleSearch} className="flex items-center w-full">
-            <input
-              type="text"
-              placeholder="Search for videos..."
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              className="w-full px-4 py-3 rounded-md focus:outline-none"
-            />
-            <button
-              type="submit"
-              className="ml-4 px-4 py-3 bg-[#FFAAAA] font-semibold text-white rounded-md hover:bg-pink-600"
-            >
-              Search
-            </button>
-          </form>
-        </div>
-      </div>
-
-      {/* Video Player */}
-      <div className="w-full my-4">
-        {selectedVideo ? (
-          <div className="w-full flex flex-col items-center my-6">
-            {/* Video */}
-            {selectedVideo.embed ? (
-              <iframe
-                src={`${selectedVideo.embed}?controls=0&showinfo=0&modestbranding=1`}
-                className=" md:w-[700px] w-full md:h-[500px] h-[500px] aspect-video rounded-md shadow-md"
-                frameBorder="0"
-                allowFullScreen
-                allow="autoplay; encrypted-media"
+      {/* Hero Section - Hide when searched */}
+      {!searched && (
+        <div className="relative overflow-hidden h-screen bg-gray-950">
+          <img
+            src={images[currentImageIndex]}
+            alt="Background"
+            className="absolute inset-0 object-cover w-full h-full opacity-50"
+          />
+          <div className="relative flex items-center flex-col gap-8 container mx-auto px-4 py-16 text-center">
+            <h1 className="text-5xl font-bold text-white mb-4">
+              Hot7 <span className="text-[#FFAAAA]">media</span>
+            </h1>
+            <p className="text-lg text-gray-300">
+              - the most comprehensive source of HD porn videos that you can
+              currently find on the internet.
+            </p>
+            <form onSubmit={handleSearch} className="flex items-center w-full">
+              <input
+                type="text"
+                placeholder="Search for videos..."
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                className="w-full px-4 py-3 rounded-md focus:outline-none"
               />
-            ) : selectedVideo.default ? (
-              <video
-                controls
-                className="w-full aspect-video rounded-md shadow-md"
+              <button
+                type="submit"
+                className="ml-4 px-4 py-3 bg-[#FFAAAA] font-semibold text-white rounded-md hover:bg-pink-600"
               >
-                <source src={selectedVideo.default} type="video/mp4" />
-                Your browser does not support the video tag.
-              </video>
-            ) : (
-              <p className="text-center text-white">Video not available</p>
-            )}
+                Search
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
 
-            {/* Related Videos */}
-            <div className="w-full max-w-screen-lg mt-6">
-              <h2 className="text-white text-2xl mb-4">Related Videos</h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+      {/* Search Results Section - Show when searched */}
+      {searched && (
+        <div className="">
+          <div className="bg-[#FFAAAA] px-3  p-3">
+            <div className="max-w-5xl mx-auto ">
+              <h1 className="md:text-5xl text-2xl text-center font-bold text-white mb-4">
+                Hot7 <span className="text-black">media</span>
+              </h1>
+              <form
+                onSubmit={handleSearch}
+                className="flex items-center w-full"
+              >
+                <input
+                  type="text"
+                  placeholder="Search for videos..."
+                  value={query}
+                  onChange={(e) => setQuery(e.target.value)}
+                  className="w-full px-4 py-3 rounded-md focus:outline-none"
+                />
+                <button
+                  type="submit"
+                  className="ml-4 px-4 py-3 font-semibold text-white rounded-md bg-pink-600"
+                >
+                  Search
+                </button>
+              </form>
+            </div>
+          </div>
+
+          {/* Video Grid */}
+          <div className="w-full my-4 px-3  ">
+            {selectedVideo ? (
+              <div className="w-full flex flex-col items-center my-6">
+                {selectedVideo.embed ? (
+                  <iframe
+                    src={`${selectedVideo.embed}?controls=0&showinfo=0&modestbranding=1`}
+                    className="md:w-[700px] w-full md:h-[500px] h-[500px] aspect-video rounded-md shadow-md"
+                    frameBorder="0"
+                    allowFullScreen
+                    allow="autoplay; encrypted-media"
+                  />
+                ) : selectedVideo.default ? (
+                  <video
+                    controls
+                    className="w-full aspect-video rounded-md shadow-md"
+                  >
+                    <source src={selectedVideo.default} type="video/mp4" />
+                    Your browser does not support the video tag.
+                  </video>
+                ) : (
+                  <p className="text-center text-white">Video not available</p>
+                )}
+
+                <div className="w-full max-w-screen-lg mt-6 px-10">
+                  <h2 className="text-white text-2xl mb-4">Related Videos</h2>
+                  <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                    {results.map((result, index) => (
+                      <div
+                        key={index}
+                        className="relative flex flex-col items-center cursor-pointer"
+                        onClick={() => handleVideoClick(result.id)}
+                      >
+                        <img
+                          src={result.default_thumb.src}
+                          alt={result.title}
+                          className="w-full h-auto rounded-md shadow-md"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            ) : (
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
                 {results.map((result, index) => (
                   <div
                     key={index}
@@ -168,44 +211,27 @@ const App = () => {
                   </div>
                 ))}
               </div>
-            </div>
+            )}
           </div>
-        ) : (
-          // Default grid view when no video is selected
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-            {results.map((result, index) => (
-              <div
-                key={index}
-                className="relative flex flex-col items-center cursor-pointer"
-                onClick={() => handleVideoClick(result.id)}
+
+          {/* Show More Button */}
+          {results.length > 0 && !loading && (
+            <div className="flex justify-center my-6">
+              <button
+                onClick={handleShowMore}
+                className="px-6 py-3 bg-[#FFAAAA] text-white rounded-md hover:bg-pink-600 font-semibold"
               >
-                <img
-                  src={result.default_thumb.src}
-                  alt={result.title}
-                  className="w-full h-auto rounded-md shadow-md"
-                />
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+                Show More
+              </button>
+            </div>
+          )}
 
-      {/* Show More Button */}
-      {results.length > 0 && !loading && (
-        <div className="flex justify-center my-6">
-          <button
-            onClick={handleShowMore}
-            className="px-6 py-3 bg-[#FFAAAA] text-white rounded-md hover:bg-pink-600 font-semibold"
-          >
-            Show More
-          </button>
-        </div>
-      )}
-
-      {/* Loading Indicator */}
-      {loading && (
-        <div className="flex flex-col items-center justify-center flex-grow my-6">
-          <div className="h-20 w-20 rounded-full animate-ping bg-[#FFAAAA]"></div>
+          {/* Loading Indicator */}
+          {loading && (
+            <div className="flex flex-col items-center justify-center flex-grow my-6">
+              <div className="h-20 w-20 rounded-full animate-ping bg-[#FFAAAA]"></div>
+            </div>
+          )}
         </div>
       )}
     </div>
