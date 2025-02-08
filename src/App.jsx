@@ -176,7 +176,7 @@ const App = () => {
                   <p className="text-center text-white">Video not available</p>
                 )}
 
-                <div className="w-full max-w-screen-lg mt-6 px-10">
+                <div className="w-full max-w-screen-lg  px-3">
                   <h2 className="text-white text-2xl mb-4">Related Videos</h2>
                   <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                     {results.map((result, index) => (
