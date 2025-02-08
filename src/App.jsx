@@ -13,6 +13,7 @@ const App = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [selectedVideo, setSelectedVideo] = useState(null);
   const [page, setPage] = useState(1); // New state for pagination
+  const [heights, setHeight] = useState(false);
 
   const images = [porn, porn2, porn3, porn4];
 
@@ -25,6 +26,7 @@ const App = () => {
 
   const handleSearch = async (e) => {
     e.preventDefault();
+    setHeight(!heights);
     if (!query) return;
 
     setLoading(true);
@@ -87,17 +89,24 @@ const App = () => {
   return (
     <div>
       {/* Hero Section */}
-      <div className="relative overflow-hidden bg-gray-950 py-4">
+      <div
+        className={`relative overflow-hidden ${
+          heights ? "min-h-0" : "min-h-screen"
+        } bg-gray-950 py-4`}
+      >
         <img
           src={images[currentImageIndex]}
           alt="Background"
           className="absolute inset-0 object-cover w-full h-full opacity-50"
         />
-        <div className="relative container mx-auto px-4 py-16 text-center">
+        <div className="relative flex items-center flex-col gap-8 container mx-auto px-4 py-16 text-center">
           <h1 className="text-5xl font-bold text-white mb-4">
             Hot7 <span className="text-[#FFAAAA]">media</span>
           </h1>
-          <p className="text-lg text-gray-300">All content available here</p>
+          <p className="text-lg text-gray-300">
+            - the most comprehensive source of HD porn videos that you can
+            currently find on the internet.
+          </p>
           <form onSubmit={handleSearch} className="flex items-center w-full">
             <input
               type="text"
